@@ -5,15 +5,14 @@
    Sections :
      1. EmailJS — Configuration (à remplir par le propriétaire)
      2. Init AOS
-     3. Curseur personnalisé
-     4. Navbar — scroll + transparence
-     5. Menu hamburger mobile
-     6. Parallax hero
-     7. Carousel avis
-     8. Galerie / Lightbox
-     9. Formulaire de réservation + EmailJS
-    10. Bouton « Retour en haut »
-    11. Date minimale — empêcher dates passées
+     3. Navbar — scroll + transparence
+     4. Menu hamburger mobile
+     5. Parallax hero
+     6. Carousel avis
+     7. Galerie / Lightbox
+     8. Formulaire de réservation + EmailJS
+     9. Bouton « Retour en haut »
+    10. Date minimale — empêcher dates passées
    ================================================================ */
 
 'use strict';
@@ -42,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     initEmailJS();
-    initCursor();
     initNavbar();
     initHamburger();
     initParallax();
@@ -60,67 +58,6 @@ function initEmailJS() {
     if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey !== 'VOTRE_PUBLIC_KEY') {
         emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
     }
-}
-
-/* ----------------------------------------------------------------
-   3. CURSEUR PERSONNALISÉ — point doré + follower
----------------------------------------------------------------- */
-function initCursor() {
-    const cursor   = document.getElementById('cursor');
-    const follower = document.getElementById('cursor-follower');
-
-    if (!cursor || !follower) return;
-
-    // Masquer sur touch
-    if (!window.matchMedia('(hover: hover)').matches) {
-        cursor.style.display   = 'none';
-        follower.style.display = 'none';
-        return;
-    }
-
-    let mouseX = 0, mouseY = 0;
-    let followerX = 0, followerY = 0;
-    let rafId;
-
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        cursor.style.left = mouseX + 'px';
-        cursor.style.top  = mouseY + 'px';
-    });
-
-    /* Follower animé en requestAnimationFrame pour la fluidité */
-    function animateFollower() {
-        followerX += (mouseX - followerX) * 0.12;
-        followerY += (mouseY - followerY) * 0.12;
-        follower.style.left = followerX + 'px';
-        follower.style.top  = followerY + 'px';
-        rafId = requestAnimationFrame(animateFollower);
-    }
-    animateFollower();
-
-    /* Effet hover sur éléments interactifs */
-    const hoverTargets = document.querySelectorAll('a, button, .card, .galerie-item, .dot');
-    hoverTargets.forEach((el) => {
-        el.addEventListener('mouseenter', () => {
-            cursor.classList.add('cursor--hover');
-            follower.classList.add('cursor-follower--hover');
-        });
-        el.addEventListener('mouseleave', () => {
-            cursor.classList.remove('cursor--hover');
-            follower.classList.remove('cursor-follower--hover');
-        });
-    });
-
-    /* Masquer curseur quand la souris quitte la fenêtre */
-    document.addEventListener('mouseleave', () => {
-        cursor.style.opacity   = '0';
-        follower.style.opacity = '0';
-    });
-    document.addEventListener('mouseenter', () => {
-        cursor.style.opacity   = '1';
-        follower.style.opacity = '0.5';
-    });
 }
 
 /* ----------------------------------------------------------------

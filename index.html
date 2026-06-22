@@ -115,10 +115,6 @@
 </head>
 <body>
 
-    <!-- Curseur personnalisé -->
-    <div class="cursor" id="cursor" aria-hidden="true"></div>
-    <div class="cursor-follower" id="cursor-follower" aria-hidden="true"></div>
-
     <!-- ================================================
          NAVIGATION
     ================================================ -->
@@ -169,10 +165,6 @@
                 <a href="#prestations" class="btn btn--ghost">Découvrir nos soins</a>
             </div>
         </div>
-        <a href="#apropos" class="hero-scroll" aria-label="Défiler vers la section suivante" data-aos="fade-up" data-aos-delay="1100">
-            <span class="hero-scroll-text">Découvrir</span>
-            <div class="hero-scroll-bar" aria-hidden="true"></div>
-        </a>
     </section>
 
     <!-- ================================================
@@ -219,7 +211,7 @@
                     </p>
                     <p>
                         Je me déplace à domicile sur <strong>Lille, Villeneuve-d'Ascq, Roubaix,
-                        Tourcoing, Marcq-en-Barœul</strong> et <strong>Wasquehal</strong> — parce que
+                        Tourcoing, Marcq-en-Barœul</strong> et <strong>Wasquehal</strong>, parce que
                         le luxe doit pouvoir venir à vous.
                     </p>
 
@@ -249,14 +241,14 @@
                 </h2>
                 <p class="section-intro">
                     Chaque soin est une invitation au voyage sensoriel, sublimé par notre
-                    savoir-faire et nos produits de prestige — esthéticienne Lille &amp; périphérie.
+                    savoir-faire et nos produits de prestige. Esthéticienne Lille &amp; périphérie.
                 </p>
             </header>
 
             <div class="prestations-grid">
 
-                <!-- Soin Visage -->
-                <article class="card" data-aos="fade-up" data-aos-delay="80">
+                <!-- Soin Visage — featured (large) -->
+                <article class="card card--featured" data-aos="fade-up" data-aos-delay="80">
                     <div class="card-media">
                         <img
                             src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=440&q=75&auto=format"
@@ -355,8 +347,8 @@
                     </div>
                 </article>
 
-                <!-- Soins Corps -->
-                <article class="card" data-aos="fade-up" data-aos-delay="400">
+                <!-- Soins Corps — featured (large) -->
+                <article class="card card--featured" data-aos="fade-up" data-aos-delay="400">
                     <div class="card-media">
                         <img
                             src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=440&q=75&auto=format"
@@ -415,13 +407,12 @@
     <section class="section section--light galerie" id="galerie" aria-labelledby="galerie-title">
         <div class="container">
             <header class="section-header" data-aos="fade-up">
-                <div class="eyebrow">Galerie</div>
                 <h2 class="section-title" id="galerie-title">
                     Avant &amp; <em>Après</em>
                 </h2>
                 <p class="section-intro">
-                    Découvrez les transformations réalisées par Lumière d'Or —
-                    chaque résultat est une promesse tenue, esthéticienne Lille Nord 59.
+                    Découvrez les transformations réalisées par Lumière d'Or.
+                    Chaque résultat est une promesse tenue, esthéticienne Lille Nord 59.
                 </p>
             </header>
 
@@ -545,7 +536,6 @@
     <section class="section avis" id="avis" aria-labelledby="avis-title">
         <div class="container">
             <header class="section-header" data-aos="fade-up">
-                <div class="eyebrow">Témoignages</div>
                 <h2 class="section-title" id="avis-title">
                     Ce qu'elles <em>disent</em>
                 </h2>
@@ -656,13 +646,12 @@
     <section class="section reservation" id="reservation" aria-labelledby="reservation-title">
         <div class="container">
             <header class="section-header" data-aos="fade-up">
-                <div class="eyebrow">Réservation</div>
                 <h2 class="section-title" id="reservation-title">
                     Prenez <em>rendez-vous</em>
                 </h2>
                 <p class="section-intro">
                     Réservez votre soin en quelques clics.
-                    Je vous confirme votre rendez-vous sous 24h.
+                    Je vous confirme votre créneau sous 24h.
                 </p>
             </header>
 
@@ -673,7 +662,9 @@
                     <h3>Informations pratiques</h3>
 
                     <div class="info-item">
-                        <span class="info-icon" aria-hidden="true">📍</span>
+                        <span class="info-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        </span>
                         <div>
                             <strong>Zone d'intervention</strong>
                             <p>Lille, Villeneuve-d'Ascq, Roubaix,<br>Tourcoing, Marcq-en-Barœul, Wasquehal</p>
@@ -681,7 +672,9 @@
                     </div>
 
                     <div class="info-item">
-                        <span class="info-icon" aria-hidden="true">🕐</span>
+                        <span class="info-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </span>
                         <div>
                             <strong>Horaires</strong>
                             <p>Mardi – Vendredi&nbsp;: 9h – 19h<br>Samedi&nbsp;: 9h – 17h<br>Dimanche &amp; Lundi&nbsp;: fermé</p>
@@ -689,7 +682,9 @@
                     </div>
 
                     <div class="info-item">
-                        <span class="info-icon" aria-hidden="true">📞</span>
+                        <span class="info-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.94h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.5a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7a2 2 0 0 1 1.72 2.03z"/></svg>
+                        </span>
                         <div>
                             <strong>Contact direct</strong>
                             <p>+33 X XX XX XX XX<br>contact@lumieredorlille.fr</p>
@@ -867,9 +862,9 @@
                 <address class="footer-contact" aria-label="Coordonnées">
                     <h4 class="footer-nav-title">Contact &amp; Horaires</h4>
                     <ul class="footer-contact-list">
-                        <li>📍 Lille &amp; périphérie — Nord 59</li>
-                        <li><a href="tel:+33XXXXXXXXX">📞 +33 X XX XX XX XX</a></li>
-                        <li><a href="mailto:contact@lumieredorlille.fr">✉ contact@lumieredorlille.fr</a></li>
+                        <li>Lille &amp; périphérie, Nord 59</li>
+                        <li><a href="tel:+33XXXXXXXXX">+33 X XX XX XX XX</a></li>
+                        <li><a href="mailto:contact@lumieredorlille.fr">contact@lumieredorlille.fr</a></li>
                     </ul>
                     <div class="footer-hours">
                         <p><strong>Mar – Ven&nbsp;:</strong> 9h – 19h</p>
