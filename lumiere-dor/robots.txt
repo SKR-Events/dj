@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.lumieredorlille.fr/sitemap.xml
+
+# Empêcher l'indexation des ressources statiques non nécessaires
+Disallow: /css/
+Disallow: /js/
