@@ -484,7 +484,7 @@ body::before {
     position:            relative;
     min-height:          100dvh;
     padding-top:         var(--nav-h);
-    background:          var(--c-bg) url('../images/hero-bg.webp') no-repeat right center / cover;
+    background:          var(--c-bg) url('../images/hero-bg.webp') no-repeat center center / cover;
     overflow:            hidden;
     display:             flex;
     align-items:         center;
@@ -495,10 +495,10 @@ body::before {
     inset:          0;
     background:     linear-gradient(
         to right,
-        rgba(248,242,236,0.97) 0%,
-        rgba(248,242,236,0.88) 48%,
-        rgba(248,242,236,0.32) 68%,
-        rgba(248,242,236,0)    82%
+        rgba(248,242,236,0.90) 0%,
+        rgba(248,242,236,0.72) 40%,
+        rgba(248,242,236,0.22) 62%,
+        rgba(248,242,236,0)    76%
     );
     pointer-events: none;
     z-index:        0;
@@ -527,17 +527,17 @@ body::before {
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color:          var(--c-terra);
-    margin-bottom:  1.25rem;
+    margin-bottom:  0.4rem;
 }
 
 .hero-title {
     font-family:    var(--font-display);
     font-size:      clamp(2.8rem, 5vw, 4.4rem);
     font-weight:    500;
-    line-height:    1.08;
+    line-height:    1.03;
     letter-spacing: -0.02em;
     color:          var(--c-text);
-    margin-bottom:  1.5rem;
+    margin-bottom:  0.7rem;
     position:       relative;
 }
 
@@ -562,7 +562,7 @@ body::before {
     color:         var(--c-text-2);
     line-height:   1.75;
     max-width:     400px;
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.2rem;
     text-wrap:     pretty;
 }
 
@@ -571,7 +571,7 @@ body::before {
     gap:           1rem;
     flex-wrap:     wrap;
     align-items:   center;
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
 }
 
 .hero-scroll {
