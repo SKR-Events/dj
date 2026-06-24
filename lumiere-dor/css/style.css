@@ -491,18 +491,23 @@ body::before {
 }
 
 .hero-container {
-    display:         flex;
-    align-items:     center;
-    gap:             4rem;
+    max-width:       none;
+    margin:          0;
+    width:           100%;
+    padding-left:    13vw;
+    padding-right:   3rem;
     padding-top:     2rem;
     padding-bottom:  2rem;
+    display:         flex;
+    align-items:     center;
+    gap:             0;
     min-height:      calc(100dvh - var(--nav-h));
 }
 
 .hero-content {
-    flex:      0 0 auto;
-    width:     62%;
-    max-width: 800px;
+    flex:      none;
+    width:     50vw;
+    max-width: 740px;
 }
 
 .hero-eyebrow {
@@ -516,7 +521,7 @@ body::before {
 
 .hero-title {
     font-family:    var(--font-display);
-    font-size:      clamp(2.8rem, 5vw, 4.4rem);
+    font-size:      clamp(2.2rem, 3.5vw, 3.4rem);
     font-weight:    500;
     line-height:    1.03;
     letter-spacing: -0.02em;
@@ -545,7 +550,7 @@ body::before {
     font-size:     1rem;
     color:         var(--c-text-2);
     line-height:   1.75;
-    max-width:     400px;
+    max-width:     100%;
     margin-bottom: 1.2rem;
     text-wrap:     pretty;
 }
