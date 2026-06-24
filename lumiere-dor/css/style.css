@@ -495,10 +495,10 @@ body::before {
     inset:          0;
     background:     linear-gradient(
         to right,
-        rgba(248,242,236,0.93) 0%,
-        rgba(248,242,236,0.80) 38%,
-        rgba(248,242,236,0.30) 60%,
-        rgba(248,242,236,0)    75%
+        rgba(248,242,236,0.97) 0%,
+        rgba(248,242,236,0.88) 48%,
+        rgba(248,242,236,0.32) 68%,
+        rgba(248,242,236,0)    82%
     );
     pointer-events: none;
     z-index:        0;
@@ -517,8 +517,8 @@ body::before {
 
 .hero-content {
     flex:      0 0 auto;
-    width:     48%;
-    max-width: 560px;
+    width:     62%;
+    max-width: 800px;
 }
 
 .hero-eyebrow {
@@ -532,12 +532,24 @@ body::before {
 
 .hero-title {
     font-family:    var(--font-display);
-    font-size:      clamp(2.8rem, 5.5vw, 4.5rem);
+    font-size:      clamp(2.8rem, 5vw, 4.4rem);
     font-weight:    500;
-    line-height:    1.1;
-    letter-spacing: -0.03em;
+    line-height:    1.08;
+    letter-spacing: -0.02em;
     color:          var(--c-text);
     margin-bottom:  1.5rem;
+    position:       relative;
+}
+
+.hero-sun-deco {
+    display:        inline-block;
+    vertical-align: top;
+    margin-left:    0.45rem;
+    margin-top:     0.12em;
+}
+.hero-sun-deco svg {
+    width:  1.7rem;
+    height: 1.7rem;
 }
 .hero-title em {
     font-style:  italic;
