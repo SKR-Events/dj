@@ -3,11 +3,9 @@
    ================================================================
    1. EmailJS configuration
    2. Scroll reveals — IntersectionObserver
-   3. Navbar — scroll + floating pill state
+   3. Navbar — scroll + .scrolled state
    4. Mobile overlay menu
-   5. Hero image load animation
-   6. Parallax hero
-   7. Carousel avis
+   5. Carousel avis
    8. Galerie / Lightbox
    9. Formulaire de réservation + EmailJS
   10. Bouton « Retour en haut »
@@ -33,8 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initReveal();
     initNavbar();
     initMobileMenu();
-    initHeroImage();
-    initParallax();
     initCarousel();
     initLightbox();
     initReservationForm();
@@ -106,26 +102,16 @@ function initNavbar() {
    4. MOBILE OVERLAY MENU
 ---------------------------------------------------------------- */
 function initMobileMenu() {
-    const hamburger  = document.getElementById('hamburger');
-    const navOverlay = document.getElementById('nav-overlay');
+    const hamburger   = document.getElementById('hamburger');
+    const navOverlay  = document.getElementById('nav-overlay');
+    const overlayClose = document.getElementById('overlay-close');
     if (!hamburger || !navOverlay) return;
 
     hamburger.addEventListener('click', toggleMobileMenu);
+    if (overlayClose) overlayClose.addEventListener('click', closeMobileMenu);
 
-    /* Fermer en appuyant sur Escape */
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeMobileMenu();
-    });
-
-    /* Fermer en cliquant en dehors de l'overlay */
-    document.addEventListener('click', (e) => {
-        if (
-            navOverlay.classList.contains('is-open') &&
-            !hamburger.contains(e.target) &&
-            !navOverlay.contains(e.target)
-        ) {
-            closeMobileMenu();
-        }
     });
 }
 
@@ -155,40 +141,7 @@ function closeMobileMenu() {
 }
 
 /* ----------------------------------------------------------------
-   5. HERO IMAGE — ajoute .loaded après chargement pour animation scale
----------------------------------------------------------------- */
-function initHeroImage() {
-    const img = document.getElementById('hero-img');
-    if (!img) return;
-
-    if (img.complete && img.naturalWidth > 0) {
-        img.closest('.hero-visual')?.classList.add('loaded');
-    } else {
-        img.addEventListener('load', () => {
-            img.closest('.hero-visual')?.classList.add('loaded');
-        });
-    }
-}
-
-/* ----------------------------------------------------------------
-   6. PARALLAX HERO — translation subtile au scroll
----------------------------------------------------------------- */
-function initParallax() {
-    const heroVisual = document.querySelector('.hero-visual');
-    if (!heroVisual) return;
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY;
-        if (scrollY < window.innerHeight) {
-            heroVisual.style.transform = `scale(1.08) translateY(${scrollY * 0.15}px)`;
-        }
-    }, { passive: true });
-}
-
-/* ----------------------------------------------------------------
-   7. CAROUSEL AVIS
+   5. CAROUSEL AVIS
 ---------------------------------------------------------------- */
 function initCarousel() {
     const track      = document.getElementById('carousel-track');
@@ -267,7 +220,7 @@ function initCarousel() {
 }
 
 /* ----------------------------------------------------------------
-   8. LIGHTBOX GALERIE
+   6. LIGHTBOX GALERIE
 ---------------------------------------------------------------- */
 function initLightbox() {
     const lightbox  = document.getElementById('lightbox');
@@ -345,7 +298,7 @@ function initLightbox() {
 }
 
 /* ----------------------------------------------------------------
-   9. FORMULAIRE DE RÉSERVATION + EMAILJS
+   7. FORMULAIRE DE RÉSERVATION + EMAILJS
 ---------------------------------------------------------------- */
 function initReservationForm() {
     const form      = document.getElementById('reservation-form');
@@ -476,7 +429,7 @@ function isValidPhone(v) {
 }
 
 /* ----------------------------------------------------------------
-  10. BOUTON RETOUR EN HAUT
+   8. BOUTON RETOUR EN HAUT
 ---------------------------------------------------------------- */
 function initBackToTop() {
     const btn = document.getElementById('back-to-top');
@@ -492,7 +445,7 @@ function initBackToTop() {
 }
 
 /* ----------------------------------------------------------------
-  11. DATE MINIMALE — interdire les dates passées
+   9. DATE MINIMALE — interdire les dates passées
 ---------------------------------------------------------------- */
 function setDateMin() {
     const dateInput = document.getElementById('date');
