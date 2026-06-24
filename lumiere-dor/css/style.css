@@ -489,24 +489,8 @@ body::before {
     display:             flex;
     align-items:         center;
 }
-.hero::after {
-    content:        '';
-    position:       absolute;
-    inset:          0;
-    background:     linear-gradient(
-        to right,
-        rgba(248,242,236,0.90) 0%,
-        rgba(248,242,236,0.72) 40%,
-        rgba(248,242,236,0.22) 62%,
-        rgba(248,242,236,0)    76%
-    );
-    pointer-events: none;
-    z-index:        0;
-}
 
 .hero-container {
-    position:        relative;
-    z-index:         1;
     display:         flex;
     align-items:     center;
     gap:             4rem;
