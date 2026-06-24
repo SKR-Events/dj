@@ -481,15 +481,32 @@ body::before {
    10. HERO
 ---------------------------------------------------------------- */
 .hero {
-    min-height: 100dvh;
-    padding-top: var(--nav-h);
-    background:  var(--c-bg);
-    overflow:    hidden;
-    display:     flex;
-    align-items: center;
+    position:            relative;
+    min-height:          100dvh;
+    padding-top:         var(--nav-h);
+    background:          var(--c-bg) url('../images/hero-bg.webp') no-repeat right center / cover;
+    overflow:            hidden;
+    display:             flex;
+    align-items:         center;
+}
+.hero::after {
+    content:        '';
+    position:       absolute;
+    inset:          0;
+    background:     linear-gradient(
+        to right,
+        rgba(248,242,236,0.93) 0%,
+        rgba(248,242,236,0.80) 38%,
+        rgba(248,242,236,0.30) 60%,
+        rgba(248,242,236,0)    75%
+    );
+    pointer-events: none;
+    z-index:        0;
 }
 
 .hero-container {
+    position:        relative;
+    z-index:         1;
     display:         flex;
     align-items:     center;
     gap:             4rem;
@@ -573,61 +590,6 @@ body::before {
     background:   var(--c-blush);
 }
 
-/* Illustration */
-.hero-illustration {
-    flex:        1;
-    position:    relative;
-    min-height:  480px;
-    display:     flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.hero-blobs {
-    position:       absolute;
-    inset:          0;
-    pointer-events: none;
-    overflow:       hidden;
-    border-radius:  var(--radius-xl);
-}
-.blob {
-    position:      absolute;
-    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-}
-.blob--blush {
-    width:      70%;
-    height:     75%;
-    top:        5%;
-    right:      -5%;
-    background: var(--c-blush);
-    opacity:    0.55;
-}
-.blob--terra {
-    width:         35%;
-    height:        32%;
-    bottom:        8%;
-    right:         15%;
-    background:    var(--c-terra);
-    opacity:       0.18;
-    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-}
-.blob--sage {
-    width:         28%;
-    height:        28%;
-    bottom:        12%;
-    left:          4%;
-    background:    var(--c-sage);
-    opacity:       0.12;
-    border-radius: 50% 50% 30% 70% / 50% 70% 30% 50%;
-}
-
-.hero-svg {
-    position:  relative;
-    z-index:   1;
-    width:     100%;
-    max-width: 420px;
-    height:    auto;
-}
 
 /* ----------------------------------------------------------------
    11. SERVICES
@@ -683,7 +645,7 @@ body::before {
     background: var(--c-coral);
     transform:  scale(1.06);
 }
-.service-icon-wrap svg { width: 30px; height: 30px; }
+.service-icon-wrap img { width: 40px; height: 40px; display: block; }
 
 .service-name {
     font-family: var(--font-display);
