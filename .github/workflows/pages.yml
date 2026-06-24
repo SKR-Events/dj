@@ -2,7 +2,7 @@ name: Deploy Lumière d'Or to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: ['claude/lumiere-dor-website-lv2ubl']
     paths: ['lumiere-dor/**']
   workflow_dispatch:
 
