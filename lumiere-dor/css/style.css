@@ -210,6 +210,16 @@ body::before {
 }
 .btn--outline:hover { background: var(--c-blush); }
 
+.btn--forest {
+    background: var(--c-forest);
+    color:      #fff;
+    box-shadow: 0 4px 18px rgba(45, 74, 62, 0.25);
+}
+.btn--forest:hover {
+    background: var(--c-sage-dk);
+    box-shadow: 0 6px 24px rgba(45, 74, 62, 0.35);
+}
+
 .btn--full { width: 100%; justify-content: center; }
 
 .btn.loading .btn-text  { opacity: 0.5; }
