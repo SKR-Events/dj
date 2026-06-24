@@ -1,18 +1,17 @@
 /* ================================================================
    LUMIÈRE D'OR — JavaScript principal
-   Esthéticienne haut de gamme · Lille Nord 59
    ================================================================
-   Sections :
-     1. EmailJS — Configuration (à remplir par le propriétaire)
-     2. Init AOS
-     3. Navbar — scroll + transparence
-     4. Menu hamburger mobile
-     5. Parallax hero
-     6. Carousel avis
-     7. Galerie / Lightbox
-     8. Formulaire de réservation + EmailJS
-     9. Bouton « Retour en haut »
-    10. Date minimale — empêcher dates passées
+   1. EmailJS configuration
+   2. Scroll reveals — IntersectionObserver
+   3. Navbar — scroll + floating pill state
+   4. Mobile overlay menu
+   5. Hero image load animation
+   6. Parallax hero
+   7. Carousel avis
+   8. Galerie / Lightbox
+   9. Formulaire de réservation + EmailJS
+  10. Bouton « Retour en haut »
+  11. Date minimale — empêcher dates passées
    ================================================================ */
 
 'use strict';
@@ -21,28 +20,20 @@
    1. EMAILJS — Remplissez vos clés avant de mettre en ligne
 ---------------------------------------------------------------- */
 const EMAILJS_CONFIG = {
-    publicKey:  'VOTRE_PUBLIC_KEY',   // Tableau de bord EmailJS → Account → Public Key
-    serviceId:  'VOTRE_SERVICE_ID',   // Services → votre service
-    templateId: 'VOTRE_TEMPLATE_ID',  // Email Templates → votre template
+    publicKey:  'VOTRE_PUBLIC_KEY',
+    serviceId:  'VOTRE_SERVICE_ID',
+    templateId: 'VOTRE_TEMPLATE_ID',
 };
 
 /* ----------------------------------------------------------------
-   2. AOS — Animate On Scroll
+   Bootstrap
 ---------------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
-    if (typeof AOS !== 'undefined') {
-        AOS.init({
-            duration: 750,
-            easing: 'ease-out-cubic',
-            once: true,
-            offset: 60,
-            delay: 0,
-        });
-    }
-
     initEmailJS();
+    initReveal();
     initNavbar();
-    initHamburger();
+    initMobileMenu();
+    initHeroImage();
     initParallax();
     initCarousel();
     initLightbox();
@@ -52,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ----------------------------------------------------------------
-   2b. EmailJS init
+   1b. EmailJS init
 ---------------------------------------------------------------- */
 function initEmailJS() {
     if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey !== 'VOTRE_PUBLIC_KEY') {
@@ -61,18 +52,34 @@ function initEmailJS() {
 }
 
 /* ----------------------------------------------------------------
-   4. NAVBAR — Opacité au scroll + lien actif
+   2. SCROLL REVEALS — IntersectionObserver pour [data-reveal]
+---------------------------------------------------------------- */
+function initReveal() {
+    const els = document.querySelectorAll('[data-reveal]');
+    if (!els.length) return;
+
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const el    = entry.target;
+            const delay = el.dataset.revealDelay ? parseInt(el.dataset.revealDelay) * 80 : 0;
+            setTimeout(() => el.classList.add('revealed'), delay);
+            io.unobserve(el);
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+    els.forEach((el) => io.observe(el));
+}
+
+/* ----------------------------------------------------------------
+   3. NAVBAR — floating pill, .scrolled state au scroll
 ---------------------------------------------------------------- */
 function initNavbar() {
     const navbar = document.getElementById('navbar');
     if (!navbar) return;
 
     function onScroll() {
-        if (window.scrollY > 80) {
-            navbar.classList.add('navbar--scrolled');
-        } else {
-            navbar.classList.remove('navbar--scrolled');
-        }
+        navbar.classList.toggle('scrolled', window.scrollY > 80);
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -81,7 +88,8 @@ function initNavbar() {
     /* Smooth scroll sur les liens de navigation */
     document.querySelectorAll('a[href^="#"]').forEach((link) => {
         link.addEventListener('click', (e) => {
-            const target = document.querySelector(link.getAttribute('href'));
+            const href   = link.getAttribute('href');
+            const target = document.querySelector(href);
             if (!target) return;
             e.preventDefault();
 
@@ -89,76 +97,98 @@ function initNavbar() {
             const top  = target.getBoundingClientRect().top + window.scrollY - navH;
 
             window.scrollTo({ top, behavior: 'smooth' });
-
-            /* Fermer le menu mobile si ouvert */
-            closeMenu();
+            closeMobileMenu();
         });
     });
 }
 
 /* ----------------------------------------------------------------
-   5. HAMBURGER — Menu mobile
+   4. MOBILE OVERLAY MENU
 ---------------------------------------------------------------- */
-function initHamburger() {
-    const hamburger = document.getElementById('hamburger');
-    const navMenu   = document.getElementById('nav-menu');
-    if (!hamburger || !navMenu) return;
+function initMobileMenu() {
+    const hamburger  = document.getElementById('hamburger');
+    const navOverlay = document.getElementById('nav-overlay');
+    if (!hamburger || !navOverlay) return;
 
-    hamburger.addEventListener('click', toggleMenu);
+    hamburger.addEventListener('click', toggleMobileMenu);
 
-    /* Fermer en cliquant en dehors */
+    /* Fermer en appuyant sur Escape */
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMobileMenu();
+    });
+
+    /* Fermer en cliquant en dehors de l'overlay */
     document.addEventListener('click', (e) => {
-        if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
-            closeMenu();
+        if (
+            navOverlay.classList.contains('is-open') &&
+            !hamburger.contains(e.target) &&
+            !navOverlay.contains(e.target)
+        ) {
+            closeMobileMenu();
         }
     });
-
-    /* Fermer avec Escape */
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeMenu();
-    });
-
-    function toggleMenu() {
-        const isOpen = hamburger.classList.toggle('hamburger--open');
-        hamburger.setAttribute('aria-expanded', isOpen);
-        navMenu.classList.toggle('nav-menu--open', isOpen);
-        document.body.style.overflow = isOpen ? 'hidden' : '';
-    }
 }
 
-function closeMenu() {
-    const hamburger = document.getElementById('hamburger');
-    const navMenu   = document.getElementById('nav-menu');
-    if (!hamburger || !navMenu) return;
+function toggleMobileMenu() {
+    const hamburger  = document.getElementById('hamburger');
+    const navOverlay = document.getElementById('nav-overlay');
+    if (!hamburger || !navOverlay) return;
 
-    hamburger.classList.remove('hamburger--open');
+    const isOpen = !navOverlay.classList.contains('is-open');
+    hamburger.classList.toggle('is-open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+    navOverlay.classList.toggle('is-open', isOpen);
+    navOverlay.setAttribute('aria-hidden', !isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+
+function closeMobileMenu() {
+    const hamburger  = document.getElementById('hamburger');
+    const navOverlay = document.getElementById('nav-overlay');
+    if (!hamburger || !navOverlay) return;
+
+    hamburger.classList.remove('is-open');
     hamburger.setAttribute('aria-expanded', 'false');
-    navMenu.classList.remove('nav-menu--open');
+    navOverlay.classList.remove('is-open');
+    navOverlay.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
 }
 
 /* ----------------------------------------------------------------
-   6. PARALLAX HERO — Translation subtile au scroll
+   5. HERO IMAGE — ajoute .loaded après chargement pour animation scale
 ---------------------------------------------------------------- */
-function initParallax() {
-    const parallax = document.getElementById('hero-parallax');
-    if (!parallax) return;
+function initHeroImage() {
+    const img = document.getElementById('hero-img');
+    if (!img) return;
 
-    /* Désactiver si préférence reduced-motion */
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    function onScroll() {
-        const scrollY = window.scrollY;
-        if (scrollY < window.innerHeight) {
-            parallax.style.transform = `translateY(${scrollY * 0.3}px)`;
-        }
+    if (img.complete && img.naturalWidth > 0) {
+        img.closest('.hero-visual')?.classList.add('loaded');
+    } else {
+        img.addEventListener('load', () => {
+            img.closest('.hero-visual')?.classList.add('loaded');
+        });
     }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
 }
 
 /* ----------------------------------------------------------------
-   7. CAROUSEL AVIS — Glissement avec touch support
+   6. PARALLAX HERO — translation subtile au scroll
+---------------------------------------------------------------- */
+function initParallax() {
+    const heroVisual = document.querySelector('.hero-visual');
+    if (!heroVisual) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+        if (scrollY < window.innerHeight) {
+            heroVisual.style.transform = `scale(1.08) translateY(${scrollY * 0.15}px)`;
+        }
+    }, { passive: true });
+}
+
+/* ----------------------------------------------------------------
+   7. CAROUSEL AVIS
 ---------------------------------------------------------------- */
 function initCarousel() {
     const track      = document.getElementById('carousel-track');
@@ -174,7 +204,6 @@ function initCarousel() {
     let current  = 0;
     let autoplay;
 
-    /* Génération des dots */
     cards.forEach((_, i) => {
         const dot = document.createElement('button');
         dot.className = 'dot' + (i === 0 ? ' dot--active' : '');
@@ -194,14 +223,12 @@ function initCarousel() {
             dot.setAttribute('aria-selected', i === current ? 'true' : 'false');
         });
 
-        /* Announce pour lecteur d'écran */
         track.setAttribute('aria-label', `Avis ${current + 1} sur ${total}`);
     }
 
     btnPrev.addEventListener('click', () => { resetAutoplay(); goTo(current - 1); });
     btnNext.addEventListener('click', () => { resetAutoplay(); goTo(current + 1); });
 
-    /* Autoplay */
     function startAutoplay() {
         autoplay = setInterval(() => goTo(current + 1), 5500);
     }
@@ -213,13 +240,11 @@ function initCarousel() {
 
     startAutoplay();
 
-    /* Pause au survol */
     if (viewport) {
         viewport.addEventListener('mouseenter', () => clearInterval(autoplay));
         viewport.addEventListener('mouseleave', startAutoplay);
     }
 
-    /* Swipe tactile */
     let touchStartX = 0;
     track.addEventListener('touchstart', (e) => {
         touchStartX = e.touches[0].clientX;
@@ -233,7 +258,6 @@ function initCarousel() {
         }
     }, { passive: true });
 
-    /* Navigation clavier */
     if (viewport) {
         viewport.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft')  { resetAutoplay(); goTo(current - 1); }
@@ -246,24 +270,23 @@ function initCarousel() {
    8. LIGHTBOX GALERIE
 ---------------------------------------------------------------- */
 function initLightbox() {
-    const lightbox   = document.getElementById('lightbox');
-    const lbImg      = document.getElementById('lightbox-img');
-    const lbCaption  = document.getElementById('lightbox-caption');
-    const lbClose    = document.getElementById('lightbox-close');
-    const lbPrev     = document.getElementById('lightbox-prev');
-    const lbNext     = document.getElementById('lightbox-next');
-    const backdrop   = document.getElementById('lightbox-backdrop');
+    const lightbox  = document.getElementById('lightbox');
+    const lbImg     = document.getElementById('lightbox-img');
+    const lbCaption = document.getElementById('lightbox-caption');
+    const lbClose   = document.getElementById('lightbox-close');
+    const lbPrev    = document.getElementById('lightbox-prev');
+    const lbNext    = document.getElementById('lightbox-next');
+    const backdrop  = document.getElementById('lightbox-backdrop');
 
     if (!lightbox || !lbImg) return;
 
-    /* Collecter toutes les images de la galerie */
-    const items = document.querySelectorAll('.galerie-item');
+    const items  = document.querySelectorAll('.galerie-item');
     const images = Array.from(items).map((item) => {
         const img = item.querySelector('img');
         const cap = item.querySelector('.galerie-label');
         return {
-            src: img ? img.src.replace(/w=\d+/, 'w=1200') : '',
-            alt: img ? img.alt : '',
+            src:     img ? img.src.replace(/w=\d+/, 'w=1200') : '',
+            alt:     img ? img.alt : '',
             caption: cap ? cap.textContent : '',
         };
     });
@@ -279,7 +302,7 @@ function initLightbox() {
         lightbox.classList.add('lightbox--active');
         lightbox.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
-        lbClose.focus();
+        if (lbClose) lbClose.focus();
     }
 
     function closeLightbox() {
@@ -292,17 +315,15 @@ function initLightbox() {
     function prev() { openAt(current - 1); }
     function next() { openAt(current + 1); }
 
-    /* Clic sur items de la galerie */
     items.forEach((item, i) => {
         item.addEventListener('click', () => openAt(i));
     });
 
-    lbClose.addEventListener('click', closeLightbox);
-    if (backdrop) backdrop.addEventListener('click', closeLightbox);
-    if (lbPrev)  lbPrev.addEventListener('click', prev);
-    if (lbNext)  lbNext.addEventListener('click', next);
+    if (lbClose)   lbClose.addEventListener('click', closeLightbox);
+    if (backdrop)  backdrop.addEventListener('click', closeLightbox);
+    if (lbPrev)    lbPrev.addEventListener('click', prev);
+    if (lbNext)    lbNext.addEventListener('click', next);
 
-    /* Clavier */
     document.addEventListener('keydown', (e) => {
         if (!lightbox.classList.contains('lightbox--active')) return;
         if (e.key === 'Escape')     closeLightbox();
@@ -310,7 +331,6 @@ function initLightbox() {
         if (e.key === 'ArrowRight') next();
     });
 
-    /* Swipe tactile */
     let touchX = 0;
     lightbox.addEventListener('touchstart', (e) => {
         touchX = e.touches[0].clientX;
@@ -336,9 +356,8 @@ function initReservationForm() {
 
     if (!form) return;
 
-    /* Validation en temps réel */
     form.querySelectorAll('input, select, textarea').forEach((field) => {
-        field.addEventListener('blur', () => validateField(field));
+        field.addEventListener('blur',  () => validateField(field));
         field.addEventListener('input', () => clearError(field));
     });
 
@@ -347,7 +366,6 @@ function initReservationForm() {
 
         if (!validateForm(form)) return;
 
-        /* État chargement */
         submitBtn.classList.add('loading');
         submitBtn.disabled = true;
         if (msgOk)  msgOk.hidden  = true;
@@ -357,14 +375,12 @@ function initReservationForm() {
 
         try {
             await sendEmail(data);
-
-            /* Succès */
             if (nameSpan) nameSpan.textContent = data.prenom;
             if (msgOk)  msgOk.hidden  = false;
             form.reset();
             form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         } catch (err) {
-            console.error('[EmailJS] Erreur envoi :', err);
+            console.error('[EmailJS] Erreur :', err);
             if (msgErr) msgErr.hidden = false;
         } finally {
             submitBtn.classList.remove('loading');
@@ -394,7 +410,6 @@ function formatDate(raw) {
 }
 
 async function sendEmail(data) {
-    /* Si EmailJS est chargé et configuré */
     if (
         typeof emailjs !== 'undefined' &&
         EMAILJS_CONFIG.publicKey  !== 'VOTRE_PUBLIC_KEY' &&
@@ -413,11 +428,10 @@ async function sendEmail(data) {
         });
     }
 
-    /* Mode démo : simule un envoi réussi (supprimer en production) */
+    /* Mode démo — simuler un envoi réussi */
     return new Promise((resolve) => setTimeout(resolve, 1200));
 }
 
-/* ---- Validation ---- */
 function validateForm(form) {
     let valid = true;
     form.querySelectorAll('[required]').forEach((field) => {
@@ -428,7 +442,6 @@ function validateForm(form) {
 
 function validateField(field) {
     const error = field.parentElement.querySelector('.field-error');
-
     if (!field.required) return true;
 
     let msg = '';
@@ -463,7 +476,7 @@ function isValidPhone(v) {
 }
 
 /* ----------------------------------------------------------------
-   10. BOUTON RETOUR EN HAUT
+  10. BOUTON RETOUR EN HAUT
 ---------------------------------------------------------------- */
 function initBackToTop() {
     const btn = document.getElementById('back-to-top');
@@ -479,14 +492,13 @@ function initBackToTop() {
 }
 
 /* ----------------------------------------------------------------
-   11. DATE MINIMALE — Interdire les dates passées dans le formulaire
+  11. DATE MINIMALE — interdire les dates passées
 ---------------------------------------------------------------- */
 function setDateMin() {
     const dateInput = document.getElementById('date');
     if (!dateInput) return;
 
     const today = new Date();
-    /* +1 jour : impossible de réserver pour aujourd'hui même */
     today.setDate(today.getDate() + 1);
 
     const yyyy = today.getFullYear();
@@ -495,7 +507,6 @@ function setDateMin() {
 
     dateInput.min = `${yyyy}-${mm}-${dd}`;
 
-    /* Bloquer dimanches et lundis (0 = dim, 1 = lun) */
     dateInput.addEventListener('input', () => {
         const selected = new Date(dateInput.value);
         const day      = selected.getUTCDay();
